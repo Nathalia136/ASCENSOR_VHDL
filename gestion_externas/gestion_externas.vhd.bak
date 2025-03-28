@@ -1,0 +1,51 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use work.componentes.all;
+
+entity gestion_externas is
+    Port (
+        clk_1Hz         : in  STD_LOGIC;                    -- Reloj de 1 Hz
+        reset           : in  STD_LOGIC;                    -- Reset global
+        -- Botones externos (pisos válidos):
+        BOTON_SUBIR     : in  STD_LOGIC_VECTOR(3 downto 0); -- SUBIR en pisos 1-4 (bits 0-3 = piso 1-4)
+        BOTON_BAJAR     : in  STD_LOGIC_VECTOR(3 downto 0); -- BAJAR en pisos 2-5 (bits 0-3 = piso 2-5)
+        -- Señales de limpieza:
+        clear_request_subir : in  STD_LOGIC_VECTOR(3 downto 0); -- Limpiar SUBIR (pisos 1-4)
+        clear_request_bajar : in  STD_LOGIC_VECTOR(3 downto 0); -- Limpiar BAJAR (pisos 2-5)
+        -- Solicitudes activas:
+        solicitudes_subir   : out STD_LOGIC_VECTOR(3 downto 0); -- SUBIR activas (pisos 1-4)
+        solicitudes_bajar   : out STD_LOGIC_VECTOR(3 downto 0)  -- BAJAR activas (pisos 2-5)
+    );
+end gestion_externas;
+
+architecture Behavioral of gestion_externas is
+    signal reg_subir, reg_bajar : STD_LOGIC_VECTOR(3 downto 0) := "0000"; -- Registros internos
+begin
+
+    -- Registro para solicitudes SUBIR (pisos 1-4):
+    RegistroSubir: GenericRegister
+    generic map(WIDTH => 4)
+    port map(
+        clk_1Hz => clk_1Hz,
+        reset   => reset,
+        enable  => '1',
+        data_in => (reg_subir or BOTON_SUBIR) and not clear_request_subir,
+        data_out=> reg_subir
+    );
+
+    -- Registro para solicitudes BAJAR (pisos 2-5):
+    RegistroBajar: GenericRegister
+    generic map(WIDTH => 4)
+    port map(
+        clk_1Hz => clk_1Hz,
+        reset   => reset,
+        enable  => '1',
+        data_in => (reg_bajar or BOTON_BAJAR) and not clear_request_bajar,
+        data_out=> reg_bajar
+    );
+
+    -- Asignar salidas:
+    solicitudes_subir <= reg_subir;
+    solicitudes_bajar <= reg_bajar;
+
+end Behavioral;

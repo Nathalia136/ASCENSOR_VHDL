@@ -1,0 +1,40 @@
+LIBRARY ieee;
+use ieee.std_logic_1164.all;
+
+entity divisor IS
+
+	port
+	(
+
+	CLK: IN STD_LOGIC;
+	out1, out2: BUFFER STD_LOGIC
+
+
+	);
+end divisor;
+
+architecture example of divisor is
+
+	SIGNAL count1: INTEGER RANGE 0 TO 25000000;
+
+begin
+	PROCESS (clk)
+		VARIABLE count2 : INTEGER RANGE 0 TO 25000000;
+
+	BEGIN
+		IF (clk'EVENT AND clk= '1') THEN
+		count1 <= count1 +1;
+		count2 := count2 +1;
+
+			IF (count1= 24999999) THEN
+			out1 <= NOT out1;
+			count1 <= 0;
+			end IF;
+			IF (count2= 25000000) THEN
+			out2 <= NOT out2;
+			count2 := 0;
+
+			END IF;
+		END IF;
+	END PROCESS;
+end example;

@@ -1,0 +1,85 @@
+m255
+K3
+13
+cModel Technology
+Z0 dC:\vhdlB\ControlAscensor\simulation\qsim
+vControlAscensor
+Z1 I:GVZ^B7<h0X^C4[bY:=^62
+Z2 VYOCFJ]zd=nO@RRTckb[QJ3
+Z3 dC:\vhdlB\ControlAscensor\simulation\qsim
+Z4 w1742946988
+Z5 8ControlAscensor.vo
+Z6 FControlAscensor.vo
+L0 31
+Z7 OV;L;10.1d;51
+r1
+31
+Z8 !s90 -work|work|ControlAscensor.vo|
+Z9 o-work work -O0
+Z10 n@control@ascensor
+!i10b 1
+Z11 !s100 JV7:VL9M]aJ[;^D@SZV?V1
+!s85 0
+Z12 !s108 1742946989.373000
+Z13 !s107 ControlAscensor.vo|
+!s101 -O0
+vControlAscensor_vlg_check_tst
+!i10b 1
+Z14 !s100 oS2NZmb4eD:B3kNg9^:Fc3
+Z15 I6oKI5N4N:T6E>2?b_iM3Q1
+Z16 V0h]RodEi;zZP<7R]A>VVU3
+R3
+Z17 w1742946987
+Z18 8Waveform.vwf.vt
+Z19 FWaveform.vwf.vt
+L0 71
+R7
+r1
+!s85 0
+31
+Z20 !s108 1742946989.436000
+Z21 !s107 Waveform.vwf.vt|
+Z22 !s90 -work|work|Waveform.vwf.vt|
+!s101 -O0
+R9
+Z23 n@control@ascensor_vlg_check_tst
+vControlAscensor_vlg_sample_tst
+!i10b 1
+Z24 !s100 Xm1_Daf75n:obK:Smiale1
+Z25 IlCck7Gl95MQ=S0aNhTaGd3
+Z26 V<4Ie`gX>o:<bDGMNDm<^E3
+R3
+R17
+R18
+R19
+L0 29
+R7
+r1
+!s85 0
+31
+R20
+R21
+R22
+!s101 -O0
+R9
+Z27 n@control@ascensor_vlg_sample_tst
+vControlAscensor_vlg_vec_tst
+!i10b 1
+Z28 !s100 l1n887YjZg[j_dFX5JP``3
+Z29 I;fa>GQSVC^OUkjcZXcHkP2
+Z30 Vk4K^OP2V7M3_hSOakSHIm0
+R3
+R17
+R18
+R19
+Z31 L0 478
+R7
+r1
+!s85 0
+31
+R20
+R21
+R22
+!s101 -O0
+R9
+Z32 n@control@ascensor_vlg_vec_tst

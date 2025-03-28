@@ -1,0 +1,76 @@
+|ContadorPersonas
+clk => Contador:CONTADOR_GENERICO.clk
+clk => GenericRegister:REG_PERSONAS.clk_1Hz
+clk => GenericRegister:REG_LUCES.clk_1Hz
+reset => GenericRegister:REG_PERSONAS.reset
+reset => GenericRegister:REG_LUCES.reset
+reset => Contador:CONTADOR_GENERICO.reset
+entrar_persona => contador_stop.IN1
+entrar_persona => Contador:CONTADOR_GENERICO.up_down
+entrar_persona => contador_stop.IN0
+salir_persona => contador_stop.IN1
+salir_persona => contador_stop.IN1
+num_personas[0] <= GenericRegister:REG_PERSONAS.data_out[0]
+num_personas[1] <= GenericRegister:REG_PERSONAS.data_out[1]
+num_personas[2] <= GenericRegister:REG_PERSONAS.data_out[2]
+num_personas[3] <= GenericRegister:REG_PERSONAS.data_out[3]
+luces <= GenericRegister:REG_LUCES.data_out[0]
+sobrecarga <= LessThan3.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|ContadorPersonas|Contador:CONTADOR_GENERICO
+clk => cnt_value[0].CLK
+clk => cnt_value[1].CLK
+clk => cnt_value[2].CLK
+clk => cnt_value[3].CLK
+reset => cnt_value[0].ACLR
+reset => cnt_value[1].ACLR
+reset => cnt_value[2].ACLR
+reset => cnt_value[3].ACLR
+stop => cnt_value[0].ENA
+stop => cnt_value[1].ENA
+stop => cnt_value[2].ENA
+stop => cnt_value[3].ENA
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+count[0] <= cnt_value[0].DB_MAX_OUTPUT_PORT_TYPE
+count[1] <= cnt_value[1].DB_MAX_OUTPUT_PORT_TYPE
+count[2] <= cnt_value[2].DB_MAX_OUTPUT_PORT_TYPE
+count[3] <= cnt_value[3].DB_MAX_OUTPUT_PORT_TYPE
+count[4] <= <GND>
+count[5] <= <GND>
+
+
+|ContadorPersonas|GenericRegister:REG_PERSONAS
+clk_1Hz => reg[0].CLK
+clk_1Hz => reg[1].CLK
+clk_1Hz => reg[2].CLK
+clk_1Hz => reg[3].CLK
+reset => reg[0].ACLR
+reset => reg[1].ACLR
+reset => reg[2].ACLR
+reset => reg[3].ACLR
+enable => reg[3].ENA
+enable => reg[2].ENA
+enable => reg[1].ENA
+enable => reg[0].ENA
+data_in[0] => reg[0].DATAIN
+data_in[1] => reg[1].DATAIN
+data_in[2] => reg[2].DATAIN
+data_in[3] => reg[3].DATAIN
+data_out[0] <= reg[0].DB_MAX_OUTPUT_PORT_TYPE
+data_out[1] <= reg[1].DB_MAX_OUTPUT_PORT_TYPE
+data_out[2] <= reg[2].DB_MAX_OUTPUT_PORT_TYPE
+data_out[3] <= reg[3].DB_MAX_OUTPUT_PORT_TYPE
+
+
+|ContadorPersonas|GenericRegister:REG_LUCES
+clk_1Hz => reg[0].CLK
+reset => reg[0].ACLR
+enable => reg[0].ENA
+data_in[0] => reg[0].DATAIN
+data_out[0] <= reg[0].DB_MAX_OUTPUT_PORT_TYPE
+
+

@@ -1,0 +1,402 @@
+// Copyright (C) 1991-2013 Altera Corporation
+// Your use of Altera Corporation's design tools, logic functions 
+// and other software and tools, and its AMPP partner logic 
+// functions, and any output files from any of the foregoing 
+// (including device programming or simulation files), and any 
+// associated documentation or information are expressly subject 
+// to the terms and conditions of the Altera Program License 
+// Subscription Agreement, Altera MegaCore Function License 
+// Agreement, or other applicable license agreement, including, 
+// without limitation, that your use is for the sole purpose of 
+// programming logic devices manufactured by Altera and sold by 
+// Altera or its authorized distributors.  Please refer to the 
+// applicable agreement for further details.
+
+// VENDOR "Altera"
+// PROGRAM "Quartus II 64-Bit"
+// VERSION "Version 13.1.0 Build 162 10/23/2013 SJ Web Edition"
+
+// DATE "03/22/2025 16:27:21"
+
+// 
+// Device: Altera EP3C16F484C6 Package FBGA484
+// 
+
+// 
+// This Verilog file should be used for ModelSim-Altera (Verilog) only
+// 
+
+`timescale 1 ps/ 1 ps
+
+module Alarmas (
+	clk,
+	reset,
+	abrir_puerta,
+	cerrar_puerta,
+	fallo_energia,
+	notificacion,
+	sobrecarga,
+	led_puerta_abi,
+	led_puerta_cie,
+	led_fallo_en,
+	led_notif,
+	led_sobrecarga);
+input 	clk;
+input 	reset;
+input 	abrir_puerta;
+input 	cerrar_puerta;
+input 	fallo_energia;
+input 	notificacion;
+input 	sobrecarga;
+output 	led_puerta_abi;
+output 	led_puerta_cie;
+output 	led_fallo_en;
+output 	led_notif;
+output 	led_sobrecarga;
+
+// Design Ports Information
+// led_puerta_abi	=>  Location: PIN_W2,	 I/O Standard: 2.5 V,	 Current Strength: Default
+// led_puerta_cie	=>  Location: PIN_N17,	 I/O Standard: 2.5 V,	 Current Strength: Default
+// led_fallo_en	=>  Location: PIN_B8,	 I/O Standard: 2.5 V,	 Current Strength: Default
+// led_notif	=>  Location: PIN_A4,	 I/O Standard: 2.5 V,	 Current Strength: Default
+// led_sobrecarga	=>  Location: PIN_K18,	 I/O Standard: 2.5 V,	 Current Strength: Default
+// abrir_puerta	=>  Location: PIN_P3,	 I/O Standard: 2.5 V,	 Current Strength: Default
+// clk	=>  Location: PIN_G2,	 I/O Standard: 2.5 V,	 Current Strength: Default
+// reset	=>  Location: PIN_G1,	 I/O Standard: 2.5 V,	 Current Strength: Default
+// cerrar_puerta	=>  Location: PIN_T17,	 I/O Standard: 2.5 V,	 Current Strength: Default
+// fallo_energia	=>  Location: PIN_A6,	 I/O Standard: 2.5 V,	 Current Strength: Default
+// notificacion	=>  Location: PIN_F8,	 I/O Standard: 2.5 V,	 Current Strength: Default
+// sobrecarga	=>  Location: PIN_L21,	 I/O Standard: 2.5 V,	 Current Strength: Default
+
+
+wire gnd;
+wire vcc;
+wire unknown;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+assign unknown = 1'bx;
+
+tri1 devclrn;
+tri1 devpor;
+tri1 devoe;
+wire \led_puerta_abi~output_o ;
+wire \led_puerta_cie~output_o ;
+wire \led_fallo_en~output_o ;
+wire \led_notif~output_o ;
+wire \led_sobrecarga~output_o ;
+wire \clk~input_o ;
+wire \clk~inputclkctrl_outclk ;
+wire \abrir_puerta~input_o ;
+wire \reset~input_o ;
+wire \reset~inputclkctrl_outclk ;
+wire \cerrar_puerta~input_o ;
+wire \fallo_energia~input_o ;
+wire \reg_alarmas_proc|reg[2]~feeder_combout ;
+wire \notificacion~input_o ;
+wire \reg_alarmas_proc|reg[3]~feeder_combout ;
+wire \sobrecarga~input_o ;
+wire [4:0] \reg_alarmas_proc|reg ;
+
+
+// Location: IOOBUF_X0_Y7_N16
+cycloneiii_io_obuf \led_puerta_abi~output (
+	.i(\reg_alarmas_proc|reg [0]),
+	.oe(vcc),
+	.seriesterminationcontrol(16'b0000000000000000),
+	.devoe(devoe),
+	.o(\led_puerta_abi~output_o ),
+	.obar());
+// synopsys translate_off
+defparam \led_puerta_abi~output .bus_hold = "false";
+defparam \led_puerta_abi~output .open_drain_output = "false";
+// synopsys translate_on
+
+// Location: IOOBUF_X41_Y12_N2
+cycloneiii_io_obuf \led_puerta_cie~output (
+	.i(\reg_alarmas_proc|reg [1]),
+	.oe(vcc),
+	.seriesterminationcontrol(16'b0000000000000000),
+	.devoe(devoe),
+	.o(\led_puerta_cie~output_o ),
+	.obar());
+// synopsys translate_off
+defparam \led_puerta_cie~output .bus_hold = "false";
+defparam \led_puerta_cie~output .open_drain_output = "false";
+// synopsys translate_on
+
+// Location: IOOBUF_X14_Y29_N30
+cycloneiii_io_obuf \led_fallo_en~output (
+	.i(\reg_alarmas_proc|reg [2]),
+	.oe(vcc),
+	.seriesterminationcontrol(16'b0000000000000000),
+	.devoe(devoe),
+	.o(\led_fallo_en~output_o ),
+	.obar());
+// synopsys translate_off
+defparam \led_fallo_en~output .bus_hold = "false";
+defparam \led_fallo_en~output .open_drain_output = "false";
+// synopsys translate_on
+
+// Location: IOOBUF_X5_Y29_N9
+cycloneiii_io_obuf \led_notif~output (
+	.i(\reg_alarmas_proc|reg [3]),
+	.oe(vcc),
+	.seriesterminationcontrol(16'b0000000000000000),
+	.devoe(devoe),
+	.o(\led_notif~output_o ),
+	.obar());
+// synopsys translate_off
+defparam \led_notif~output .bus_hold = "false";
+defparam \led_notif~output .open_drain_output = "false";
+// synopsys translate_on
+
+// Location: IOOBUF_X41_Y21_N9
+cycloneiii_io_obuf \led_sobrecarga~output (
+	.i(\reg_alarmas_proc|reg [4]),
+	.oe(vcc),
+	.seriesterminationcontrol(16'b0000000000000000),
+	.devoe(devoe),
+	.o(\led_sobrecarga~output_o ),
+	.obar());
+// synopsys translate_off
+defparam \led_sobrecarga~output .bus_hold = "false";
+defparam \led_sobrecarga~output .open_drain_output = "false";
+// synopsys translate_on
+
+// Location: IOIBUF_X0_Y14_N1
+cycloneiii_io_ibuf \clk~input (
+	.i(clk),
+	.ibar(gnd),
+	.o(\clk~input_o ));
+// synopsys translate_off
+defparam \clk~input .bus_hold = "false";
+defparam \clk~input .simulate_z_as = "z";
+// synopsys translate_on
+
+// Location: CLKCTRL_G4
+cycloneiii_clkctrl \clk~inputclkctrl (
+	.ena(vcc),
+	.inclk({vcc,vcc,vcc,\clk~input_o }),
+	.clkselect(2'b00),
+	.devclrn(devclrn),
+	.devpor(devpor),
+	.outclk(\clk~inputclkctrl_outclk ));
+// synopsys translate_off
+defparam \clk~inputclkctrl .clock_type = "global clock";
+defparam \clk~inputclkctrl .ena_register_mode = "none";
+// synopsys translate_on
+
+// Location: IOIBUF_X0_Y9_N1
+cycloneiii_io_ibuf \abrir_puerta~input (
+	.i(abrir_puerta),
+	.ibar(gnd),
+	.o(\abrir_puerta~input_o ));
+// synopsys translate_off
+defparam \abrir_puerta~input .bus_hold = "false";
+defparam \abrir_puerta~input .simulate_z_as = "z";
+// synopsys translate_on
+
+// Location: IOIBUF_X0_Y14_N8
+cycloneiii_io_ibuf \reset~input (
+	.i(reset),
+	.ibar(gnd),
+	.o(\reset~input_o ));
+// synopsys translate_off
+defparam \reset~input .bus_hold = "false";
+defparam \reset~input .simulate_z_as = "z";
+// synopsys translate_on
+
+// Location: CLKCTRL_G2
+cycloneiii_clkctrl \reset~inputclkctrl (
+	.ena(vcc),
+	.inclk({vcc,vcc,vcc,\reset~input_o }),
+	.clkselect(2'b00),
+	.devclrn(devclrn),
+	.devpor(devpor),
+	.outclk(\reset~inputclkctrl_outclk ));
+// synopsys translate_off
+defparam \reset~inputclkctrl .clock_type = "global clock";
+defparam \reset~inputclkctrl .ena_register_mode = "none";
+// synopsys translate_on
+
+// Location: FF_X1_Y7_N17
+dffeas \reg_alarmas_proc|reg[0] (
+	.clk(\clk~inputclkctrl_outclk ),
+	.d(gnd),
+	.asdata(\abrir_puerta~input_o ),
+	.clrn(!\reset~inputclkctrl_outclk ),
+	.aload(gnd),
+	.sclr(gnd),
+	.sload(vcc),
+	.ena(vcc),
+	.devclrn(devclrn),
+	.devpor(devpor),
+	.q(\reg_alarmas_proc|reg [0]),
+	.prn(vcc));
+// synopsys translate_off
+defparam \reg_alarmas_proc|reg[0] .is_wysiwyg = "true";
+defparam \reg_alarmas_proc|reg[0] .power_up = "low";
+// synopsys translate_on
+
+// Location: IOIBUF_X41_Y2_N1
+cycloneiii_io_ibuf \cerrar_puerta~input (
+	.i(cerrar_puerta),
+	.ibar(gnd),
+	.o(\cerrar_puerta~input_o ));
+// synopsys translate_off
+defparam \cerrar_puerta~input .bus_hold = "false";
+defparam \cerrar_puerta~input .simulate_z_as = "z";
+// synopsys translate_on
+
+// Location: FF_X37_Y27_N17
+dffeas \reg_alarmas_proc|reg[1] (
+	.clk(\clk~inputclkctrl_outclk ),
+	.d(gnd),
+	.asdata(\cerrar_puerta~input_o ),
+	.clrn(!\reset~inputclkctrl_outclk ),
+	.aload(gnd),
+	.sclr(gnd),
+	.sload(vcc),
+	.ena(vcc),
+	.devclrn(devclrn),
+	.devpor(devpor),
+	.q(\reg_alarmas_proc|reg [1]),
+	.prn(vcc));
+// synopsys translate_off
+defparam \reg_alarmas_proc|reg[1] .is_wysiwyg = "true";
+defparam \reg_alarmas_proc|reg[1] .power_up = "low";
+// synopsys translate_on
+
+// Location: IOIBUF_X11_Y29_N15
+cycloneiii_io_ibuf \fallo_energia~input (
+	.i(fallo_energia),
+	.ibar(gnd),
+	.o(\fallo_energia~input_o ));
+// synopsys translate_off
+defparam \fallo_energia~input .bus_hold = "false";
+defparam \fallo_energia~input .simulate_z_as = "z";
+// synopsys translate_on
+
+// Location: LCCOMB_X11_Y28_N24
+cycloneiii_lcell_comb \reg_alarmas_proc|reg[2]~feeder (
+// Equation(s):
+// \reg_alarmas_proc|reg[2]~feeder_combout  = \fallo_energia~input_o 
+
+	.dataa(gnd),
+	.datab(gnd),
+	.datac(gnd),
+	.datad(\fallo_energia~input_o ),
+	.cin(gnd),
+	.combout(\reg_alarmas_proc|reg[2]~feeder_combout ),
+	.cout());
+// synopsys translate_off
+defparam \reg_alarmas_proc|reg[2]~feeder .lut_mask = 16'hFF00;
+defparam \reg_alarmas_proc|reg[2]~feeder .sum_lutc_input = "datac";
+// synopsys translate_on
+
+// Location: FF_X11_Y28_N25
+dffeas \reg_alarmas_proc|reg[2] (
+	.clk(\clk~inputclkctrl_outclk ),
+	.d(\reg_alarmas_proc|reg[2]~feeder_combout ),
+	.asdata(vcc),
+	.clrn(!\reset~inputclkctrl_outclk ),
+	.aload(gnd),
+	.sclr(gnd),
+	.sload(gnd),
+	.ena(vcc),
+	.devclrn(devclrn),
+	.devpor(devpor),
+	.q(\reg_alarmas_proc|reg [2]),
+	.prn(vcc));
+// synopsys translate_off
+defparam \reg_alarmas_proc|reg[2] .is_wysiwyg = "true";
+defparam \reg_alarmas_proc|reg[2] .power_up = "low";
+// synopsys translate_on
+
+// Location: IOIBUF_X5_Y29_N22
+cycloneiii_io_ibuf \notificacion~input (
+	.i(notificacion),
+	.ibar(gnd),
+	.o(\notificacion~input_o ));
+// synopsys translate_off
+defparam \notificacion~input .bus_hold = "false";
+defparam \notificacion~input .simulate_z_as = "z";
+// synopsys translate_on
+
+// Location: LCCOMB_X6_Y28_N0
+cycloneiii_lcell_comb \reg_alarmas_proc|reg[3]~feeder (
+// Equation(s):
+// \reg_alarmas_proc|reg[3]~feeder_combout  = \notificacion~input_o 
+
+	.dataa(gnd),
+	.datab(gnd),
+	.datac(gnd),
+	.datad(\notificacion~input_o ),
+	.cin(gnd),
+	.combout(\reg_alarmas_proc|reg[3]~feeder_combout ),
+	.cout());
+// synopsys translate_off
+defparam \reg_alarmas_proc|reg[3]~feeder .lut_mask = 16'hFF00;
+defparam \reg_alarmas_proc|reg[3]~feeder .sum_lutc_input = "datac";
+// synopsys translate_on
+
+// Location: FF_X6_Y28_N1
+dffeas \reg_alarmas_proc|reg[3] (
+	.clk(\clk~inputclkctrl_outclk ),
+	.d(\reg_alarmas_proc|reg[3]~feeder_combout ),
+	.asdata(vcc),
+	.clrn(!\reset~inputclkctrl_outclk ),
+	.aload(gnd),
+	.sclr(gnd),
+	.sload(gnd),
+	.ena(vcc),
+	.devclrn(devclrn),
+	.devpor(devpor),
+	.q(\reg_alarmas_proc|reg [3]),
+	.prn(vcc));
+// synopsys translate_off
+defparam \reg_alarmas_proc|reg[3] .is_wysiwyg = "true";
+defparam \reg_alarmas_proc|reg[3] .power_up = "low";
+// synopsys translate_on
+
+// Location: IOIBUF_X41_Y18_N15
+cycloneiii_io_ibuf \sobrecarga~input (
+	.i(sobrecarga),
+	.ibar(gnd),
+	.o(\sobrecarga~input_o ));
+// synopsys translate_off
+defparam \sobrecarga~input .bus_hold = "false";
+defparam \sobrecarga~input .simulate_z_as = "z";
+// synopsys translate_on
+
+// Location: FF_X40_Y15_N17
+dffeas \reg_alarmas_proc|reg[4] (
+	.clk(\clk~inputclkctrl_outclk ),
+	.d(gnd),
+	.asdata(\sobrecarga~input_o ),
+	.clrn(!\reset~inputclkctrl_outclk ),
+	.aload(gnd),
+	.sclr(gnd),
+	.sload(vcc),
+	.ena(vcc),
+	.devclrn(devclrn),
+	.devpor(devpor),
+	.q(\reg_alarmas_proc|reg [4]),
+	.prn(vcc));
+// synopsys translate_off
+defparam \reg_alarmas_proc|reg[4] .is_wysiwyg = "true";
+defparam \reg_alarmas_proc|reg[4] .power_up = "low";
+// synopsys translate_on
+
+assign led_puerta_abi = \led_puerta_abi~output_o ;
+
+assign led_puerta_cie = \led_puerta_cie~output_o ;
+
+assign led_fallo_en = \led_fallo_en~output_o ;
+
+assign led_notif = \led_notif~output_o ;
+
+assign led_sobrecarga = \led_sobrecarga~output_o ;
+
+endmodule

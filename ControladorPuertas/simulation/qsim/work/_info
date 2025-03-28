@@ -1,0 +1,85 @@
+m255
+K3
+13
+cModel Technology
+Z0 dC:\vhdlB\ControladorPuertas\simulation\qsim
+vControladorPuertas
+Z1 !s100 O6gC]=f<ezX>K@[^3iP2S1
+Z2 I7a;BL2YLCAYgHU8h<fmh?0
+Z3 V1ZjATaj4Gg?lWNfcHGObQ0
+Z4 dC:\vhdlB\ControladorPuertas\simulation\qsim
+Z5 w1742662859
+Z6 8ControladorPuertas.vo
+Z7 FControladorPuertas.vo
+L0 31
+Z8 OV;L;10.1d;51
+r1
+31
+Z9 !s90 -work|work|ControladorPuertas.vo|
+Z10 o-work work -O0
+Z11 n@controlador@puertas
+!i10b 1
+!s85 0
+Z12 !s108 1742662860.023000
+Z13 !s107 ControladorPuertas.vo|
+!s101 -O0
+vControladorPuertas_vlg_check_tst
+!i10b 1
+Z14 !s100 V6ZF5VRi>jcc`;e<T9@=M1
+Z15 I9AAb`YhccKXoD?nN0c^Hh0
+Z16 VVSbbfX;:L4B?mY>TH`=[V2
+R4
+Z17 w1742662858
+Z18 8Waveform.vwf.vt
+Z19 FWaveform.vwf.vt
+L0 69
+R8
+r1
+!s85 0
+31
+Z20 !s108 1742662860.089000
+Z21 !s107 Waveform.vwf.vt|
+Z22 !s90 -work|work|Waveform.vwf.vt|
+!s101 -O0
+R10
+Z23 n@controlador@puertas_vlg_check_tst
+vControladorPuertas_vlg_sample_tst
+!i10b 1
+Z24 !s100 n:WE`YN>VRh0d5JWz<[mB0
+Z25 IcO7YKVYhzShI1<]0M9;9J2
+Z26 VE24dHfIm^b83eiZNnTY;b2
+R4
+R17
+R18
+R19
+L0 29
+R8
+r1
+!s85 0
+31
+R20
+R21
+R22
+!s101 -O0
+R10
+Z27 n@controlador@puertas_vlg_sample_tst
+vControladorPuertas_vlg_vec_tst
+!i10b 1
+Z28 !s100 NeE3oEW5beNmB<cYRXT;23
+Z29 IUKXcZJlRa[fG^E@Qlh^l03
+Z30 VU;`fVoKhNl:5UHc=^_9^K2
+R4
+R17
+R18
+R19
+Z31 L0 164
+R8
+r1
+!s85 0
+31
+R20
+R21
+R22
+!s101 -O0
+R10
+Z32 n@controlador@puertas_vlg_vec_tst

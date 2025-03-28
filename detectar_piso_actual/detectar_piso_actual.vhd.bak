@@ -1,0 +1,80 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_ARITH.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+-- Incluir el paquete de componentes
+USE work.componentes.all;
+
+ENTITY detectar_piso_actual IS
+    PORT(
+        clk_1Hz      : IN STD_LOGIC;                     -- Reloj de 1 Hz
+        reset        : IN STD_LOGIC;                     -- Reinicio del sistema
+        motor_subir  : IN STD_LOGIC;                     -- Señal de subida
+        motor_bajar  : IN STD_LOGIC;                     -- Señal de bajada
+        piso_destino : IN STD_LOGIC_VECTOR(2 downto 0);  -- Piso destino (3 bits para 5 pisos)
+        piso_actual  : OUT STD_LOGIC_VECTOR(2 downto 0); -- Piso actual (3 bits para 5 pisos)
+        llegada_piso : OUT STD_LOGIC                     -- Pulso de llegada a un piso destino
+    );
+END detectar_piso_actual;
+
+ARCHITECTURE structural OF detectar_piso_actual IS
+    -- Señales internas
+    signal contador_piso : STD_LOGIC_VECTOR(2 downto 0);  -- Contador interno para el piso actual
+    signal piso_anterior : STD_LOGIC_VECTOR(2 downto 0);  -- Piso anterior para detectar cambios
+    signal cambio_piso   : STD_LOGIC;                     -- Señal de cambio de piso
+    signal llegada_piso_int : STD_LOGIC;                  -- Señal interna para el pulso de llegada
+
+BEGIN
+    -- ==============================================
+    -- Contador para el piso actual
+    -- ==============================================
+    contador: GenericCounter
+    generic map(
+        MIN_COUNT => 0,  -- Piso mínimo (0: sótano, 1: primer piso, etc.)
+        MAX_COUNT => 4   -- Piso máximo (4: quinto piso)
+    )
+    port map(
+        clk     => clk_1Hz,      -- Reloj de 1 Hz
+        reset   => reset,        -- Reinicio del sistema
+        stop    => '0',          -- No se detiene manualmente
+        up_down => motor_subir,  -- Subir si motor_subir = '1', bajar si motor_bajar = '1'
+        count   => contador_piso -- Salida del contador (piso actual)
+    );
+
+    -- ==============================================
+    -- Registro para almacenar el piso actual
+    -- ==============================================
+    registro_piso: GenericRegister
+    generic map(
+        WIDTH => 3  -- Ancho del registro (3 bits para 5 pisos)
+    )
+    port map(
+        clk_1Hz  => clk_1Hz,      -- Reloj de 1 Hz
+        reset    => reset,        -- Reinicio del sistema
+        enable   => '1',          -- Habilitar siempre la escritura
+        data_in  => contador_piso, -- Entrada del contador
+        data_out => piso_actual   -- Salida del registro (piso actual)
+    );
+
+    -- ==============================================
+    -- Comparador para detectar llegada al piso destino
+    -- ==============================================
+    comparador: GenericComparator
+    generic map(
+        WIDTH => 3  -- Ancho de los datos a comparar (3 bits)
+    )
+    port map(
+        A      => contador_piso,  -- Piso actual
+        B      => piso_destino,   -- Piso destino
+        equal  => llegada_piso_int, -- Pulso de llegada al piso destino
+        greater=> open,           -- No se usa
+        less   => open            -- No se usa
+    );
+
+    -- ==============================================
+    -- Generación del pulso de llegada a piso
+    -- ==============================================
+    llegada_piso <= llegada_piso_int;  -- Pulso de llegada cuando se alcanza el piso destino
+
+END structural;

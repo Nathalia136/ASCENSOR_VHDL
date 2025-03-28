@@ -1,0 +1,161 @@
+|ControlAscensor
+clk_1Hz => GenericRegister:MotorRegister.clk_1Hz
+clk_1Hz => contador_timeout[0].CLK
+clk_1Hz => contador_timeout[1].CLK
+clk_1Hz => contador_timeout[2].CLK
+clk_1Hz => contador_timeout[3].CLK
+clk_1Hz => contador_timeout[4].CLK
+clk_1Hz => timeout_puerta.CLK
+clk_1Hz => llegada_piso~reg0.CLK
+clk_1Hz => esperando_puerta.CLK
+clk_1Hz => start_timer.CLK
+clk_1Hz => clear_request_bajar[0]~reg0.CLK
+clk_1Hz => clear_request_bajar[1]~reg0.CLK
+clk_1Hz => clear_request_bajar[2]~reg0.CLK
+clk_1Hz => clear_request_bajar[3]~reg0.CLK
+clk_1Hz => clear_request_subir[0]~reg0.CLK
+clk_1Hz => clear_request_subir[1]~reg0.CLK
+clk_1Hz => clear_request_subir[2]~reg0.CLK
+clk_1Hz => clear_request_subir[3]~reg0.CLK
+clk_1Hz => clear_request[0]~reg0.CLK
+clk_1Hz => clear_request[1]~reg0.CLK
+clk_1Hz => clear_request[2]~reg0.CLK
+clk_1Hz => clear_request[3]~reg0.CLK
+clk_1Hz => clear_request[4]~reg0.CLK
+clk_1Hz => GenericTimer:Timer.clk_1Hz
+reset => comb.IN1
+reset => GenericRegister:MotorRegister.reset
+reset => contador_timeout[0].ACLR
+reset => contador_timeout[1].ACLR
+reset => contador_timeout[2].ACLR
+reset => contador_timeout[3].ACLR
+reset => contador_timeout[4].ACLR
+reset => timeout_puerta.ACLR
+reset => llegada_piso~reg0.ACLR
+reset => esperando_puerta.ACLR
+reset => start_timer.ACLR
+reset => clear_request_bajar[0]~reg0.ACLR
+reset => clear_request_bajar[1]~reg0.ACLR
+reset => clear_request_bajar[2]~reg0.ACLR
+reset => clear_request_bajar[3]~reg0.ACLR
+reset => clear_request_subir[0]~reg0.ACLR
+reset => clear_request_subir[1]~reg0.ACLR
+reset => clear_request_subir[2]~reg0.ACLR
+reset => clear_request_subir[3]~reg0.ACLR
+reset => clear_request[0]~reg0.ACLR
+reset => clear_request[1]~reg0.ACLR
+reset => clear_request[2]~reg0.ACLR
+reset => clear_request[3]~reg0.ACLR
+reset => clear_request[4]~reg0.ACLR
+piso_actual[0] => GenericComparator:Comparator.A[0]
+piso_actual[1] => GenericComparator:Comparator.A[1]
+piso_actual[2] => GenericComparator:Comparator.A[2]
+piso_destino[0] => LessThan0.IN6
+piso_destino[0] => LessThan1.IN6
+piso_destino[0] => piso_destino_num[0].DATAB
+piso_destino[0] => GenericComparator:Comparator.B[0]
+piso_destino[1] => LessThan0.IN5
+piso_destino[1] => LessThan1.IN5
+piso_destino[1] => piso_destino_num[1].DATAB
+piso_destino[1] => GenericComparator:Comparator.B[1]
+piso_destino[2] => LessThan0.IN4
+piso_destino[2] => LessThan1.IN4
+piso_destino[2] => piso_destino_num[2].DATAB
+piso_destino[2] => GenericComparator:Comparator.B[2]
+fallo_energia => fault.IN0
+notificacion => fault.IN1
+sobrecarga => fault.IN1
+puerta => process_0.IN1
+puerta => movimiento_permitido.IN1
+puerta => process_0.IN1
+motor_subir <= motor_subir.DB_MAX_OUTPUT_PORT_TYPE
+motor_bajar <= motor_bajar.DB_MAX_OUTPUT_PORT_TYPE
+llegada_piso <= llegada_piso~reg0.DB_MAX_OUTPUT_PORT_TYPE
+clear_request[0] <= clear_request[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+clear_request[1] <= clear_request[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+clear_request[2] <= clear_request[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+clear_request[3] <= clear_request[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+clear_request[4] <= clear_request[4]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+clear_request_subir[0] <= clear_request_subir[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+clear_request_subir[1] <= clear_request_subir[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+clear_request_subir[2] <= clear_request_subir[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+clear_request_subir[3] <= clear_request_subir[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+clear_request_bajar[0] <= clear_request_bajar[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+clear_request_bajar[1] <= clear_request_bajar[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+clear_request_bajar[2] <= clear_request_bajar[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+clear_request_bajar[3] <= clear_request_bajar[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|ControlAscensor|GenericComparator:Comparator
+A[0] => Equal0.IN2
+A[0] => LessThan0.IN3
+A[0] => LessThan1.IN3
+A[1] => Equal0.IN1
+A[1] => LessThan0.IN2
+A[1] => LessThan1.IN2
+A[2] => Equal0.IN0
+A[2] => LessThan0.IN1
+A[2] => LessThan1.IN1
+B[0] => Equal0.IN5
+B[0] => LessThan0.IN6
+B[0] => LessThan1.IN6
+B[1] => Equal0.IN4
+B[1] => LessThan0.IN5
+B[1] => LessThan1.IN5
+B[2] => Equal0.IN3
+B[2] => LessThan0.IN4
+B[2] => LessThan1.IN4
+equal <= Equal0.DB_MAX_OUTPUT_PORT_TYPE
+greater <= LessThan0.DB_MAX_OUTPUT_PORT_TYPE
+less <= LessThan1.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|ControlAscensor|GenericRegister:MotorRegister
+clk_1Hz => reg[0].CLK
+clk_1Hz => reg[1].CLK
+reset => reg[0].ACLR
+reset => reg[1].ACLR
+enable => reg[1].ENA
+enable => reg[0].ENA
+data_in[0] => reg[0].DATAIN
+data_in[1] => reg[1].DATAIN
+data_out[0] <= reg[0].DB_MAX_OUTPUT_PORT_TYPE
+data_out[1] <= reg[1].DB_MAX_OUTPUT_PORT_TYPE
+
+
+|ControlAscensor|GenericTimer:Timer
+clk_1Hz => Contador:CounterInst.clk
+clk_1Hz => done~reg0.CLK
+clk_1Hz => cnt_enable.CLK
+reset => Contador:CounterInst.reset
+reset => done~reg0.ACLR
+reset => cnt_enable.ACLR
+start => cnt_enable.OUTPUTSELECT
+done <= done~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|ControlAscensor|GenericTimer:Timer|Contador:CounterInst
+clk => cnt_value[0].CLK
+clk => cnt_value[1].CLK
+clk => cnt_value[2].CLK
+clk => cnt_value[3].CLK
+reset => cnt_value[0].ACLR
+reset => cnt_value[1].ACLR
+reset => cnt_value[2].ACLR
+reset => cnt_value[3].ACLR
+stop => cnt_value[0].ENA
+stop => cnt_value[1].ENA
+stop => cnt_value[2].ENA
+stop => cnt_value[3].ENA
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+count[0] <= cnt_value[0].DB_MAX_OUTPUT_PORT_TYPE
+count[1] <= cnt_value[1].DB_MAX_OUTPUT_PORT_TYPE
+count[2] <= cnt_value[2].DB_MAX_OUTPUT_PORT_TYPE
+count[3] <= cnt_value[3].DB_MAX_OUTPUT_PORT_TYPE
+count[4] <= <GND>
+count[5] <= <GND>
+
+

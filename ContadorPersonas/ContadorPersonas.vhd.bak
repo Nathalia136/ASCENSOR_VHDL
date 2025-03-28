@@ -1,0 +1,70 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;  -- Para operaciones aritméticas
+USE work.componentes.ALL;         -- Usar la librería de componentes
+
+ENTITY ContadorPersonas IS
+    PORT(
+        clk           : IN STD_LOGIC;   -- Reloj de 1 Hz
+        reset         : IN STD_LOGIC;   -- Reset global
+        entrar_persona: IN STD_LOGIC;   -- Señal de entrada de una persona
+        salir_persona : IN STD_LOGIC;   -- Señal de salida de una persona
+        num_personas  : OUT STD_LOGIC_VECTOR(3 downto 0);  -- Número de personas dentro
+        luces         : OUT STD_LOGIC   -- Control de luces (1: encendidas, 0: apagadas)
+    );
+END ContadorPersonas;
+
+ARCHITECTURE Behavioral OF ContadorPersonas IS
+    signal contador_personas : STD_LOGIC_VECTOR(3 downto 0) := "0000";  -- Contador interno
+    signal luces_int         : STD_LOGIC := '0';  -- Estado interno de las luces
+BEGIN
+    -- Registro para almacenar el número de personas
+    REG_PERSONAS: GenericRegister
+        GENERIC MAP (WIDTH => 4)  -- Ancho de 4 bits para contar hasta 15 personas
+        PORT MAP (
+            clk_1Hz => clk,           -- Reloj de 1 Hz
+            reset => reset,           -- Reinicio del registro
+            enable => '1',            -- Siempre habilitado
+            data_in => contador_personas,  -- Dato de entrada (contador actualizado)
+            data_out => contador_personas  -- Dato de salida (contador actual)
+        );
+
+    -- Registro para almacenar el estado de las luces
+    REG_LUCES: GenericRegister
+        GENERIC MAP (WIDTH => 1)  -- Ancho de 1 bit para el estado de las luces
+        PORT MAP (
+            clk_1Hz => clk,           -- Reloj de 1 Hz
+            reset => reset,           -- Reinicio del registro
+            enable => '1',            -- Siempre habilitado
+            data_in(0) => luces_int,  -- Dato de entrada (estado de las luces)
+            data_out(0) => luces_int  -- Dato de salida (estado de las luces)
+        );
+
+    -- Proceso para contar personas y controlar las luces
+    PROCESS (clk, reset)
+    BEGIN
+        IF reset = '1' THEN
+            -- Reiniciar el contador y apagar las luces
+            contador_personas <= "0000";
+            luces_int <= '0';
+        ELSIF rising_edge(clk) THEN
+            -- Lógica para contar personas
+            IF entrar_persona = '1' THEN
+                contador_personas <= contador_personas + 1;  -- Incrementar contador
+            ELSIF salir_persona = '1' AND contador_personas > 0 THEN
+                contador_personas <= contador_personas - 1;  -- Decrementar contador
+            END IF;
+
+            -- Control de luces
+            IF contador_personas > 0 THEN
+                luces_int <= '1';  -- Encender luces si hay personas dentro
+            ELSE
+                luces_int <= '0';  -- Apagar luces si no hay personas dentro
+            END IF;
+        END IF;
+    END PROCESS;
+
+    -- Asignación de salidas
+    num_personas <= contador_personas;  -- Número de personas dentro
+    luces <= luces_int;                 -- Estado de las luces
+END Behavioral;

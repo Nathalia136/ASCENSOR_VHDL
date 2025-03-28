@@ -1,0 +1,66 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+
+-- Incluir el paquete de componentes
+USE work.componentes.all;
+
+ENTITY Alarmas IS
+    PORT(
+        clk           : IN std_logic;          -- Reloj principal (50 MHz)
+        reset         : IN std_logic;          -- Reinicio del sistema
+        abrir_puerta  : IN std_logic;          -- Señal de apertura de puerta
+        cerrar_puerta : IN std_logic;          -- Señal de cierre de puerta
+        fallo_energia : IN std_logic;          -- Señal de fallo de energía
+        notificacion  : IN std_logic;          -- Señal de notificación (botón presionado)
+        sobrecarga    : IN std_logic;          -- Señal de sobrecarga (más de 10 personas)
+        led_puerta_abi: OUT std_logic;         -- LED de alarma de puerta abierta
+        led_puerta_cie: OUT std_logic;         -- LED de alarma de puerta cerrada
+        led_fallo_en  : OUT std_logic;         -- LED de alarma de fallo de energía
+        led_notif     : OUT std_logic;         -- LED de alarma de notificación
+        led_sobrecarga: OUT std_logic          -- LED de alarma de sobrecarga
+    );
+END Alarmas;
+
+ARCHITECTURE structural OF Alarmas IS
+    -- Señales internas
+    signal reg_alarmas : std_logic_vector(4 downto 0);  -- Registro para almacenar el estado de las alarmas
+    signal alarmas_in  : std_logic_vector(4 downto 0);  -- Entradas de las alarmas
+    signal alarmas_out : std_logic_vector(4 downto 0);  -- Salidas de las alarmas
+
+BEGIN
+    -- ==============================================
+    -- Asignación de entradas a las alarmas
+    -- ==============================================
+    alarmas_in <= (
+        0 => abrir_puerta,   -- Alarma de puerta abierta
+        1 => cerrar_puerta,  -- Alarma de puerta cerrada
+        2 => fallo_energia,  -- Alarma de fallo de energía
+        3 => notificacion,   -- Alarma de notificación
+        4 => sobrecarga      -- Alarma de sobrecarga
+    );
+
+    -- ==============================================
+    -- Registro para almacenar el estado de las alarmas
+    -- ==============================================
+    reg_alarmas_proc: GenericRegister
+    generic map(
+        WIDTH => 5  -- Ancho del registro (5 alarmas)
+    )
+    port map(
+        clk_1Hz => clk,      -- Reloj principal
+        reset   => reset,    -- Reinicio del sistema
+        enable  => '1',      -- Habilitar siempre la escritura
+        data_in => alarmas_in,  -- Entradas de las alarmas
+        data_out=> reg_alarmas  -- Estado actual de las alarmas
+    );
+
+    -- ==============================================
+    -- Asignación de salidas de las alarmas
+    -- ==============================================
+    led_puerta_abi <= reg_alarmas(0);  -- LED de puerta abierta
+    led_puerta_cie <= reg_alarmas(1);  -- LED de puerta cerrada
+    led_fallo_en   <= reg_alarmas(2);  -- LED de fallo de energía
+    led_notif      <= reg_alarmas(3);  -- LED de notificación
+    led_sobrecarga <= reg_alarmas(4);  -- LED de sobrecarga
+
+END structural;

@@ -1,0 +1,43 @@
+|Alarmas
+clk => GenericRegister:reg_alarmas_proc.clk_1Hz
+reset => GenericRegister:reg_alarmas_proc.reset
+abrir_puerta => GenericRegister:reg_alarmas_proc.data_in[0]
+cerrar_puerta => GenericRegister:reg_alarmas_proc.data_in[1]
+fallo_energia => GenericRegister:reg_alarmas_proc.data_in[2]
+notificacion => GenericRegister:reg_alarmas_proc.data_in[3]
+sobrecarga => GenericRegister:reg_alarmas_proc.data_in[4]
+led_puerta_abi <= GenericRegister:reg_alarmas_proc.data_out[0]
+led_puerta_cie <= GenericRegister:reg_alarmas_proc.data_out[1]
+led_fallo_en <= GenericRegister:reg_alarmas_proc.data_out[2]
+led_notif <= GenericRegister:reg_alarmas_proc.data_out[3]
+led_sobrecarga <= GenericRegister:reg_alarmas_proc.data_out[4]
+
+
+|Alarmas|GenericRegister:reg_alarmas_proc
+clk_1Hz => reg[0].CLK
+clk_1Hz => reg[1].CLK
+clk_1Hz => reg[2].CLK
+clk_1Hz => reg[3].CLK
+clk_1Hz => reg[4].CLK
+reset => reg[0].ACLR
+reset => reg[1].ACLR
+reset => reg[2].ACLR
+reset => reg[3].ACLR
+reset => reg[4].ACLR
+enable => reg[4].ENA
+enable => reg[3].ENA
+enable => reg[2].ENA
+enable => reg[1].ENA
+enable => reg[0].ENA
+data_in[0] => reg[0].DATAIN
+data_in[1] => reg[1].DATAIN
+data_in[2] => reg[2].DATAIN
+data_in[3] => reg[3].DATAIN
+data_in[4] => reg[4].DATAIN
+data_out[0] <= reg[0].DB_MAX_OUTPUT_PORT_TYPE
+data_out[1] <= reg[1].DB_MAX_OUTPUT_PORT_TYPE
+data_out[2] <= reg[2].DB_MAX_OUTPUT_PORT_TYPE
+data_out[3] <= reg[3].DB_MAX_OUTPUT_PORT_TYPE
+data_out[4] <= reg[4].DB_MAX_OUTPUT_PORT_TYPE
+
+

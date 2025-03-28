@@ -1,0 +1,115 @@
+|ControladorPuertas
+clk => GenericTimer:timer_apertura.clk_1Hz
+clk => llegada_detectada.CLK
+clk => reset_timer_cierre.CLK
+clk => reset_timer_apertura.CLK
+clk => iniciar_timer_cierre.CLK
+clk => iniciar_timer_apertura.CLK
+clk => puerta_abierta_int.CLK
+clk => GenericTimer:timer_cierre.clk_1Hz
+clk => GenericRegister:RegistroPuerta.clk_1Hz
+reset => comb.IN1
+reset => comb.IN1
+reset => GenericRegister:RegistroPuerta.reset
+reset => llegada_detectada.ACLR
+reset => reset_timer_cierre.ACLR
+reset => reset_timer_apertura.ACLR
+reset => iniciar_timer_cierre.ACLR
+reset => iniciar_timer_apertura.ACLR
+reset => puerta_abierta_int.ACLR
+llegada_piso => process_0.IN1
+abrir_manual => process_0.IN1
+cerrar_manual => process_0.IN1
+fallo_energia => process_0.IN0
+notificacion => process_0.IN1
+puerta <= GenericRegister:RegistroPuerta.data_out[0]
+
+
+|ControladorPuertas|GenericTimer:timer_apertura
+clk_1Hz => Contador:CounterInst.clk
+clk_1Hz => done~reg0.CLK
+clk_1Hz => cnt_enable.CLK
+reset => Contador:CounterInst.reset
+reset => done~reg0.ACLR
+reset => cnt_enable.ACLR
+start => cnt_enable.OUTPUTSELECT
+done <= done~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|ControladorPuertas|GenericTimer:timer_apertura|Contador:CounterInst
+clk => cnt_value[0].CLK
+clk => cnt_value[1].CLK
+clk => cnt_value[2].CLK
+clk => cnt_value[3].CLK
+reset => cnt_value[0].ACLR
+reset => cnt_value[1].ACLR
+reset => cnt_value[2].ACLR
+reset => cnt_value[3].ACLR
+stop => cnt_value[0].ENA
+stop => cnt_value[1].ENA
+stop => cnt_value[2].ENA
+stop => cnt_value[3].ENA
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+count[0] <= cnt_value[0].DB_MAX_OUTPUT_PORT_TYPE
+count[1] <= cnt_value[1].DB_MAX_OUTPUT_PORT_TYPE
+count[2] <= cnt_value[2].DB_MAX_OUTPUT_PORT_TYPE
+count[3] <= cnt_value[3].DB_MAX_OUTPUT_PORT_TYPE
+count[4] <= <GND>
+count[5] <= <GND>
+
+
+|ControladorPuertas|GenericTimer:timer_cierre
+clk_1Hz => Contador:CounterInst.clk
+clk_1Hz => done~reg0.CLK
+clk_1Hz => cnt_enable.CLK
+reset => Contador:CounterInst.reset
+reset => done~reg0.ACLR
+reset => cnt_enable.ACLR
+start => cnt_enable.OUTPUTSELECT
+done <= done~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|ControladorPuertas|GenericTimer:timer_cierre|Contador:CounterInst
+clk => cnt_value[0].CLK
+clk => cnt_value[1].CLK
+clk => cnt_value[2].CLK
+clk => cnt_value[3].CLK
+clk => cnt_value[4].CLK
+clk => cnt_value[5].CLK
+reset => cnt_value[0].ACLR
+reset => cnt_value[1].ACLR
+reset => cnt_value[2].ACLR
+reset => cnt_value[3].ACLR
+reset => cnt_value[4].ACLR
+reset => cnt_value[5].ACLR
+stop => cnt_value[0].ENA
+stop => cnt_value[1].ENA
+stop => cnt_value[2].ENA
+stop => cnt_value[3].ENA
+stop => cnt_value[4].ENA
+stop => cnt_value[5].ENA
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+count[0] <= cnt_value[0].DB_MAX_OUTPUT_PORT_TYPE
+count[1] <= cnt_value[1].DB_MAX_OUTPUT_PORT_TYPE
+count[2] <= cnt_value[2].DB_MAX_OUTPUT_PORT_TYPE
+count[3] <= cnt_value[3].DB_MAX_OUTPUT_PORT_TYPE
+count[4] <= cnt_value[4].DB_MAX_OUTPUT_PORT_TYPE
+count[5] <= cnt_value[5].DB_MAX_OUTPUT_PORT_TYPE
+
+
+|ControladorPuertas|GenericRegister:RegistroPuerta
+clk_1Hz => reg[0].CLK
+reset => reg[0].ACLR
+enable => reg[0].ENA
+data_in[0] => reg[0].DATAIN
+data_out[0] <= reg[0].DB_MAX_OUTPUT_PORT_TYPE
+
+

@@ -1,0 +1,44 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity GenericCounter is
+    generic (
+        MIN_COUNT : integer := 0;   -- Valor mínimo del contador
+        MAX_COUNT : integer := 59   -- Valor máximo del contador
+    );
+    port (
+        clk     : in std_logic;     -- Reloj del sistema
+        reset   : in std_logic;     -- Reiniciar contador
+        stop    : in std_logic;     -- Pausar contador
+        up_down : in std_logic;     -- Control de dirección (1: up, 0: down)
+        count   : out std_logic_vector(5 downto 0) -- Salida del contador
+    );
+end GenericCounter;
+
+architecture Behavioral of GenericCounter is
+    signal cnt : integer range MIN_COUNT to MAX_COUNT := MIN_COUNT; -- Contador interno
+begin
+    process(clk, reset, stop)
+    begin
+        if reset = '1' then
+            cnt <= MIN_COUNT; -- Reiniciar contador al valor mínimo
+        elsif rising_edge(clk) and stop = '0' then -- Solo contar si stop = '0'
+            if up_down = '1' then -- Modo cuenta ascendente
+                if cnt = MAX_COUNT then
+                    cnt <= MIN_COUNT; -- Reiniciar contador al valor mínimo
+                else
+                    cnt <= cnt + 1; -- Incrementar contador
+                end if;
+            else -- Modo cuenta descendente
+                if cnt = MIN_COUNT then
+                    cnt <= MAX_COUNT; -- Reiniciar contador al valor máximo
+                else
+                    cnt <= cnt - 1; -- Decrementar contador
+                end if;
+            end if;
+        end if;
+    end process;
+
+    count <= std_logic_vector(to_unsigned(cnt, 6)); -- Convertir el contador a std_logic_vector
+end Behavioral;

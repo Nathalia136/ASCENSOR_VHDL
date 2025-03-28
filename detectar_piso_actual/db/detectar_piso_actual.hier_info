@@ -1,0 +1,74 @@
+|detectar_piso_actual
+clk_1Hz => GenericTimer:TimerInst.clk_1Hz
+clk_1Hz => movimiento_activo.CLK
+clk_1Hz => timer_start.CLK
+clk_1Hz => piso_actual_int[0].CLK
+clk_1Hz => piso_actual_int[1].CLK
+clk_1Hz => piso_actual_int[2].CLK
+clk_1Hz => GenericRegister:RegPisoActual.clk_1Hz
+reset => GenericTimer:TimerInst.reset
+reset => movimiento_activo.ACLR
+reset => timer_start.ACLR
+reset => piso_actual_int[0].PRESET
+reset => piso_actual_int[1].ACLR
+reset => piso_actual_int[2].ACLR
+reset => GenericRegister:RegPisoActual.reset
+motor_subir => process_0.IN0
+motor_subir => process_0.IN1
+motor_bajar => process_0.IN1
+motor_bajar => process_0.IN1
+piso_actual[0] << GenericRegister:RegPisoActual.data_out[0]
+piso_actual[1] << GenericRegister:RegPisoActual.data_out[1]
+piso_actual[2] << GenericRegister:RegPisoActual.data_out[2]
+
+
+|detectar_piso_actual|GenericTimer:TimerInst
+clk_1Hz => Contador:CounterInst.clk
+clk_1Hz => done~reg0.CLK
+clk_1Hz => cnt_enable.CLK
+reset => Contador:CounterInst.reset
+reset => done~reg0.ACLR
+reset => cnt_enable.ACLR
+start => cnt_enable.OUTPUTSELECT
+done <= done~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|detectar_piso_actual|GenericTimer:TimerInst|Contador:CounterInst
+clk => cnt_value[0].CLK
+clk => cnt_value[1].CLK
+clk => cnt_value[2].CLK
+reset => cnt_value[0].ACLR
+reset => cnt_value[1].ACLR
+reset => cnt_value[2].ACLR
+stop => cnt_value[0].ENA
+stop => cnt_value[1].ENA
+stop => cnt_value[2].ENA
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+count[0] <= cnt_value[0].DB_MAX_OUTPUT_PORT_TYPE
+count[1] <= cnt_value[1].DB_MAX_OUTPUT_PORT_TYPE
+count[2] <= cnt_value[2].DB_MAX_OUTPUT_PORT_TYPE
+count[3] <= <GND>
+count[4] <= <GND>
+count[5] <= <GND>
+
+
+|detectar_piso_actual|GenericRegister:RegPisoActual
+clk_1Hz => reg[0].CLK
+clk_1Hz => reg[1].CLK
+clk_1Hz => reg[2].CLK
+reset => reg[0].ACLR
+reset => reg[1].ACLR
+reset => reg[2].ACLR
+enable => reg[2].ENA
+enable => reg[1].ENA
+enable => reg[0].ENA
+data_in[0] => reg[0].DATAIN
+data_in[1] => reg[1].DATAIN
+data_in[2] => reg[2].DATAIN
+data_out[0] <= reg[0].DB_MAX_OUTPUT_PORT_TYPE
+data_out[1] <= reg[1].DB_MAX_OUTPUT_PORT_TYPE
+data_out[2] <= reg[2].DB_MAX_OUTPUT_PORT_TYPE
+
+

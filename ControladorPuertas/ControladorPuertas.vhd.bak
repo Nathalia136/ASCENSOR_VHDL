@@ -1,0 +1,72 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE work.componentes.ALL;  -- Usar la librería de componentes
+
+ENTITY ControladorPuertas IS
+    PORT(
+        clk           : IN STD_LOGIC;   -- Reloj de 1 Hz
+        reset         : IN STD_LOGIC;   -- Reset global
+        llegada_piso  : IN STD_LOGIC;   -- Señal de llegada a un piso
+        abrir_manual  : IN STD_LOGIC;   -- Botón para abrir la puerta manualmente
+        cerrar_manual : IN STD_LOGIC;   -- Botón para cerrar la puerta manualmente
+        puerta_abierta: OUT STD_LOGIC;  -- Estado de la puerta (1: abierta, 0: cerrada)
+        abrir_puerta  : OUT STD_LOGIC;  -- Señal para abrir la puerta
+        cerrar_puerta : OUT STD_LOGIC   -- Señal para cerrar la puerta
+    );
+END ControladorPuertas;
+
+ARCHITECTURE Behavioral OF ControladorPuertas IS
+    -- Señales internas
+    signal puerta_abierta_int : STD_LOGIC := '0';  -- Estado interno de la puerta
+    signal timer_apertura_done : STD_LOGIC;  -- Señal de fin de temporización para apertura
+    signal timer_cierre_done : STD_LOGIC;  -- Señal de fin de temporización para cierre
+    signal iniciar_timer_cierre : STD_LOGIC := '0';  -- Señal para iniciar el temporizador de cierre
+
+BEGIN
+    -- Temporizador para la apertura de puertas (10 segundos)
+    timer_apertura: GenericTimer
+        GENERIC MAP (MAX_COUNT => 10)  -- Temporizador de 10 segundos
+        PORT MAP (
+            clk_1Hz => clk,           -- Reloj de 1 Hz
+            reset => reset,           -- Reinicio del temporizador
+            start => llegada_piso OR abrir_manual,  -- Iniciar temporizador al llegar o abrir manualmente
+            done => timer_apertura_done  -- Señal de fin de temporización
+        );
+
+    -- Temporizador para el cierre de puertas (45 segundos)
+    timer_cierre: GenericTimer
+        GENERIC MAP (MAX_COUNT => 45)  -- Temporizador de 45 segundos
+        PORT MAP (
+            clk_1Hz => clk,           -- Reloj de 1 Hz
+            reset => reset,           -- Reinicio del temporizador
+            start => iniciar_timer_cierre,  -- Iniciar temporizador cuando se active esta señal
+            done => timer_cierre_done  -- Señal de fin de temporización
+        );
+
+    -- Proceso para manejar la apertura y cierre de puertas
+    PROCESS (clk, reset)
+    BEGIN
+        IF reset = '1' THEN
+            -- Reiniciar con la puerta cerrada
+            puerta_abierta_int <= '0';
+            iniciar_timer_cierre <= '0';
+        ELSIF rising_edge(clk) THEN
+            -- Lógica para abrir la puerta
+            IF (llegada_piso = '1' OR abrir_manual = '1') AND puerta_abierta_int = '0' THEN
+                puerta_abierta_int <= '1';  -- Abrir puerta
+                iniciar_timer_cierre <= '1';  -- Iniciar temporizador de cierre después de abrir
+            END IF;
+
+            -- Lógica para cerrar la puerta
+            IF timer_cierre_done = '1' THEN
+                puerta_abierta_int <= '0';  -- Cerrar puerta
+                iniciar_timer_cierre <= '0';  -- Reiniciar señal de inicio de temporizador de cierre
+            END IF;
+        END IF;
+    END PROCESS;
+
+    -- Asignación de salidas
+    puerta_abierta <= puerta_abierta_int;  -- Estado de la puerta
+    abrir_puerta <= llegada_piso OR abrir_manual;  -- Señal para abrir la puerta
+    cerrar_puerta <= timer_cierre_done;  -- Señal para cerrar la puerta
+END Behavioral;

@@ -1,0 +1,16 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity DECOD7 is
+
+	port
+	(
+		-- Input ports
+		ABCD	: in  std_logic_vector(3 downto 0);
+
+
+		-- Output ports
+		DISPLAY	: out std_logic_vector(6 downto 0)
+	);
+end DECOD7;
+ 

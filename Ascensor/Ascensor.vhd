@@ -1,0 +1,229 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_ARITH.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+-- Incluir el paquete de componentes
+USE work.componentes.all;
+
+-- Entidad principal del ascensor
+ENTITY Ascensor IS
+    PORT(
+        -- Entradas principales
+        CLK_50MHz     : IN STD_LOGIC;   -- Reloj de 50 MHz
+        RESET         : IN STD_LOGIC;   -- Reset global
+        FALLO_ENERGIA : IN STD_LOGIC;   -- Señal de fallo de energía
+        
+        -- Botones externos (Piso 1 sin BAJAR, Piso 5 sin SUBIR)
+        BOTON_SUBIR   : IN STD_LOGIC_VECTOR(3 downto 0); -- SUBIR pisos 1-4 (bits 0-3)
+        BOTON_BAJAR   : IN STD_LOGIC_VECTOR(3 downto 0); -- BAJAR pisos 2-5 (bits 1-4)
+        
+        -- Botones internos
+        BOTON_PISO_INT: IN STD_LOGIC_VECTOR(4 downto 0); -- Botones de piso 1-5
+        BOTON_ABRIR   : IN STD_LOGIC;  -- Abrir puerta manual
+        BOTON_CERRAR  : IN STD_LOGIC;  -- Cerrar puerta manual
+        NOTIFICACION  : IN STD_LOGIC;  -- Botón de notificación
+        
+        -- Sensores de personas
+        SENSOR_ENTRA  : IN STD_LOGIC; -- Persona entra
+        SENSOR_SALE   : IN STD_LOGIC; -- Persona sale
+        
+        -- Salidas de display (2 displays: interno y externo)
+        DISPLAY_INT    : OUT STD_LOGIC_VECTOR(6 downto 0);  -- Display interno
+        DISPLAY_EXT    : OUT STD_LOGIC_VECTOR(6 downto 0);  -- Display externo
+        DISPLAY_PER_UNI: OUT STD_LOGIC_VECTOR(6 downto 0);  -- Display de unidades de personas
+        DISPLAY_PER_DEC: OUT STD_LOGIC_VECTOR(6 downto 0);  -- Display de decenas de personas
+        
+        -- Sistema de alarmas
+        LED_SOBRECARGA: OUT STD_LOGIC;  -- Alarma >10 personas
+        LED_FALLO_EN  : OUT STD_LOGIC;  -- Fallo energía
+        LED_PUERTA_ABI: OUT STD_LOGIC;  -- Puerta abierta
+        LED_PUERTA_CIE: OUT STD_LOGIC;  -- Puerta cerrada
+        LED_NOTIF     : OUT STD_LOGIC;  -- Notificación activa
+        LUCES         : OUT STD_LOGIC;  -- Control de iluminación
+        
+        -- Nuevas salidas para indicar movimiento
+        LED_SUBIR     : OUT STD_LOGIC;  -- LED para indicar subida
+        LED_BAJAR, clk, r    : OUT STD_LOGIC   -- LED para indicar bajada
+    );
+END Ascensor;
+
+ARCHITECTURE structural OF Ascensor IS
+    -- Señales intermedias
+    signal clk_1Hz      : std_logic;
+    signal num_personas : std_logic_vector(3 downto 0);
+    signal sobrecarga   : std_logic;
+    signal puerta       : std_logic;
+    signal piso_actual  : std_logic_vector(2 downto 0);
+    signal motor_subir  : std_logic;
+    signal motor_bajar  : std_logic;
+    signal llegada_piso : std_logic;
+    
+    -- Señales para displays
+    signal piso_bcd     : std_logic_vector(3 downto 0);
+    signal personas_bcd : std_logic_vector(7 downto 0);
+    signal unidades_bcd : std_logic_vector(3 downto 0);
+    signal decenas_bcd  : std_logic_vector(3 downto 0);
+    
+    -- Señales de control
+    signal solicitudes_internas : std_logic_vector(4 downto 0);
+    signal clear_request        : std_logic_vector(4 downto 0);
+    signal piso_destino         : std_logic_vector(2 downto 0);
+    signal clear_request_subir  : std_logic_vector(3 downto 0);
+    signal clear_request_bajar  : std_logic_vector(3 downto 0);
+    
+    -- Señales para solicitudes externas
+    signal solicitudes_subir    : std_logic_vector(3 downto 0);  -- Solicitudes SUBIR (pisos 1-4)
+    signal solicitudes_bajar    : std_logic_vector(3 downto 0);  -- Solicitudes BAJAR (pisos 2-5)
+
+BEGIN
+    -- =============================================
+    -- Instanciación de componentes
+    -- =============================================
+    
+    -- Divisor de frecuencia para reloj de 1 Hz
+    div_frec: divisor
+    generic map(DIVIDER => 25000000)  -- 50 MHz a 1 Hz
+    port map(
+        CLK  => CLK_50MHz,
+        out1 => clk_1Hz
+    );
+	 
+	 clk <= clk_1Hz;
+	 r <= RESET;
+    
+    -- Contador de personas
+    cont_pers: ContadorPersonas
+    port map(
+        clk            => clk_1Hz,
+        reset          => RESET,
+        entrar_persona => SENSOR_ENTRA,
+        salir_persona  => SENSOR_SALE,
+        num_personas   => num_personas,
+        luces          => LUCES,
+        sobrecarga     => sobrecarga
+    );
+    
+    -- Controlador de puertas
+    ctrl_puertas: ControladorPuertas
+    port map(
+        clk           => clk_1Hz,
+        reset         => RESET,
+        llegada_piso  => llegada_piso,
+        abrir_manual  => BOTON_ABRIR,
+        cerrar_manual => BOTON_CERRAR,
+        fallo_energia => FALLO_ENERGIA,
+        notificacion  => NOTIFICACION,
+        puerta        => puerta
+    );
+    
+    -- Sistema de alarmas
+    alarmas_sys: Alarmas
+    port map(
+        clk            => clk_1Hz,
+        reset          => RESET,
+        abrir_puerta   => puerta,
+        cerrar_puerta  => not puerta,
+        fallo_energia  => FALLO_ENERGIA,
+        notificacion   => NOTIFICACION,
+        sobrecarga     => sobrecarga,
+        led_puerta_abi => LED_PUERTA_ABI,  -- Conectar directamente
+        led_puerta_cie => LED_PUERTA_CIE,  -- Conectar directamente
+        led_fallo_en   => LED_FALLO_EN,    -- Conectar directamente
+        led_notif      => LED_NOTIF,       -- Conectar directamente
+        led_sobrecarga => LED_SOBRECARGA   -- Conectar directamente
+    );
+    
+    -- Gestión de solicitudes internas
+    gest_cabina: gestion_cabina
+    port map(
+        clk             => clk_1Hz,
+        reset           => RESET,
+        botones_cabina  => BOTON_PISO_INT,
+        clear_request   => clear_request,
+        solicitudes_internas => solicitudes_internas
+    );
+    
+    -- Detección de piso actual
+    det_piso: detectar_piso_actual
+    port map(
+        clk_1Hz     => clk_1Hz,
+        reset       => RESET,
+        motor_subir => motor_subir,
+        motor_bajar => motor_bajar,
+        piso_actual => piso_actual
+    );
+    
+    -- Gestión de solicitudes externas
+    gest_externas: gestion_externas
+    port map(
+        clk_1Hz         => clk_1Hz,
+        reset           => RESET,
+        BOTON_SUBIR     => BOTON_SUBIR,
+        BOTON_BAJAR     => BOTON_BAJAR,
+        clear_request_subir => clear_request_subir,
+        clear_request_bajar => clear_request_bajar,
+        solicitudes_subir   => solicitudes_subir,  -- Conectar señal intermedia
+        solicitudes_bajar   => solicitudes_bajar   -- Conectar señal intermedia
+    );
+    
+    -- Identificación de dirección y destino
+    ident_dir: identificador_direccion
+    port map(
+        clk_1Hz            => clk_1Hz,
+        reset              => RESET,
+        motor_subir        => motor_subir,
+        motor_bajar        => motor_bajar,
+        solicitudes_subir  => solicitudes_subir,  -- Conectar señal intermedia
+        solicitudes_bajar  => solicitudes_bajar,  -- Conectar señal intermedia
+        solicitudes_cabina => solicitudes_internas,
+        piso_destino       => piso_destino
+    );
+    
+    -- Control principal del ascensor
+    ctrl_principal: ControlAscensor
+    port map(
+        clk_1Hz          => clk_1Hz,
+        reset            => RESET,
+        piso_actual      => piso_actual,
+        piso_destino     => piso_destino,
+        fallo_energia    => FALLO_ENERGIA,
+        notificacion     => NOTIFICACION,
+        sobrecarga       => sobrecarga,
+        puerta           => puerta,
+        motor_subir      => motor_subir,
+        motor_bajar      => motor_bajar,
+        llegada_piso     => llegada_piso,
+        clear_request    => clear_request,
+        clear_request_subir => clear_request_subir,
+        clear_request_bajar => clear_request_bajar
+    );
+    
+    -- =============================================
+    -- Conversión para displays
+    -- =============================================
+    piso_bcd <= '0' & piso_actual;  -- Mantener valores 0-4
+    
+    -- Display interno y externo (piso actual)
+    disp_piso_int: DECOD7 port map(piso_bcd, DISPLAY_INT);
+    disp_piso_ext: DECOD7 port map(piso_bcd, DISPLAY_EXT);
+    
+    -- Display de personas
+    conversor_personas: Des2
+    generic map(INPUT_WIDTH => 4)
+    port map(
+        entrada   => num_personas,
+        unidades  => unidades_bcd,
+        decenas   => decenas_bcd
+    );
+    
+    disp_uni_pers: DECOD7 port map(unidades_bcd, DISPLAY_PER_UNI);
+    disp_dec_pers: DECOD7 port map(decenas_bcd, DISPLAY_PER_DEC);
+
+    -- =============================================
+    -- Conexión directa de salidas
+    -- =============================================
+    LED_SUBIR <= motor_subir;
+    LED_BAJAR <= motor_bajar;
+
+END structural;

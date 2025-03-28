@@ -1,0 +1,57 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+
+-- Incluir el paquete de componentes
+USE work.componentes.all;
+
+ENTITY gestion_cabina IS
+    PORT(
+        clk           : IN std_logic;                     -- Reloj de 1 Hz
+        reset         : IN std_logic;                     -- Reinicio del sistema
+        botones_cabina: IN std_logic_vector(4 downto 0);  -- Botones internos (pisos 1-5)
+        solicitudes_internas: OUT std_logic_vector(4 downto 0)  -- Solicitudes internas activas
+    );
+END gestion_cabina;
+
+ARCHITECTURE structural OF gestion_cabina IS
+    -- Señales internas
+    signal reg_solicitudes : std_logic_vector(4 downto 0);  -- Registro para almacenar solicitudes
+    signal solicitudes_activas : std_logic_vector(4 downto 0);  -- Solicitudes activas
+
+BEGIN
+    -- ==============================================
+    -- Registro para almacenar las solicitudes internas
+    -- ==============================================
+    reg_solicitudes_proc: GenericRegister
+    generic map(
+        WIDTH => 5  -- Ancho del registro (5 botones de piso)
+    )
+    port map(
+        clk_1Hz => clk,               -- Reloj de 1 Hz
+        reset   => reset,             -- Reinicio del sistema
+        enable  => '1',               -- Habilitar siempre la escritura
+        data_in => botones_cabina,    -- Entradas de los botones de cabina
+        data_out=> reg_solicitudes    -- Estado actual de las solicitudes
+    );
+
+    -- ==============================================
+    -- Comparador para verificar si hay solicitudes activas
+    -- ==============================================
+    comp_solicitudes: GenericComparator
+    generic map(
+        WIDTH => 5  -- Ancho de los datos a comparar
+    )
+    port map(
+        A      => reg_solicitudes,    -- Solicitudes registradas
+        B      => "00000",            -- Comparar con "00000" (ninguna solicitud)
+        equal  => open,               -- No se usa
+        greater=> solicitudes_activas(0),  -- Hay al menos una solicitud activa
+        less   => open                -- No se usa
+    );
+
+    -- ==============================================
+    -- Asignación de salidas
+    -- ==============================================
+    solicitudes_internas <= reg_solicitudes;  -- Las solicitudes internas son las registradas
+
+END structural;

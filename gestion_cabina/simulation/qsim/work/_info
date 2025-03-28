@@ -1,0 +1,81 @@
+m255
+K3
+13
+cModel Technology
+Z0 dC:\vhdlB\gestion_cabina\simulation\qsim
+vgestion_cabina
+Z1 !s100 `Lik3AmFh52Bo]hDzBVei2
+Z2 Ig[>J@ibLTUaS6HU`L;;?>1
+Z3 Vz^7QzbG_5J1=ack[c_gF:3
+Z4 dC:\vhdlB\gestion_cabina\simulation\qsim
+Z5 w1742940883
+Z6 8gestion_cabina.vo
+Z7 Fgestion_cabina.vo
+L0 31
+Z8 OV;L;10.1d;51
+r1
+31
+Z9 !s90 -work|work|gestion_cabina.vo|
+Z10 o-work work -O0
+!i10b 1
+!s85 0
+Z11 !s108 1742940884.562000
+Z12 !s107 gestion_cabina.vo|
+!s101 -O0
+vgestion_cabina_vlg_check_tst
+!i10b 1
+Z13 !s100 X?EEjY9=UG?GSgWgFQF7K3
+Z14 IoGm8I=V33N52FFizg6nlQ3
+Z15 VCVDa=8QE8aoWQii=WoGI@1
+R4
+Z16 w1742940882
+Z17 8Waveform.vwf.vt
+Z18 FWaveform.vwf.vt
+L0 63
+R8
+r1
+!s85 0
+31
+Z19 !s108 1742940884.647000
+Z20 !s107 Waveform.vwf.vt|
+Z21 !s90 -work|work|Waveform.vwf.vt|
+!s101 -O0
+R10
+vgestion_cabina_vlg_sample_tst
+!i10b 1
+Z22 !s100 Oe=]]4?RgE@Eb[l2iLO1M0
+Z23 I3Dgz@[8PoWU7ZDHND1QSA0
+Z24 V>7cbP50KY]e3Lgc8_n>ej1
+R4
+R16
+R17
+R18
+L0 29
+R8
+r1
+!s85 0
+31
+R19
+R20
+R21
+!s101 -O0
+R10
+vgestion_cabina_vlg_vec_tst
+!i10b 1
+!s100 22z>^NC?cK^CLR8>NRQeC0
+I;K[ZUDjzgEHj]W7EVg[H21
+Z25 VlR0XcTc@R?]:4Qo2I0FJi2
+R4
+R16
+R17
+R18
+Z26 L0 229
+R8
+r1
+!s85 0
+31
+R19
+R20
+R21
+!s101 -O0
+R10

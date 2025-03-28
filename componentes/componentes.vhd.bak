@@ -1,0 +1,38 @@
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.all;
+
+package componentes is
+
+	component ContadorMinutos is
+		 port (
+			  clk: in std_logic;          
+			  reset: in std_logic;         
+			  stop: in std_logic;          
+			  up_down: in std_logic;      
+			  minutos: out std_logic_vector(5 downto 0) 
+		 );
+	end component;
+	
+	component DECOD7 is
+		port(
+			ABCD	: in  std_logic_vector(3 downto 0);
+			DISPLAY	: out std_logic_vector(6 downto 0)
+			);
+	end component;
+	
+	component Des2 is
+		 Port (
+			  entrada : in  STD_LOGIC_VECTOR (3 downto 0); 
+			  unidades : out STD_LOGIC_VECTOR (3 downto 0); 
+			  decenas : out STD_LOGIC_VECTOR (3 downto 0)  
+		 );
+	end component;
+
+	component divisor IS
+		port(
+		CLK: IN STD_LOGIC;
+		out1, out2: BUFFER STD_LOGIC
+		);
+	end component;
+
+end componentes;

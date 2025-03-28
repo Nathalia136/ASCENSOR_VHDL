@@ -1,0 +1,92 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+use work.componentes.all;
+
+entity ControlAscensor is
+    Port (
+        clk_1Hz         : in  STD_LOGIC;                    -- Reloj de 1 Hz
+        reset           : in  STD_LOGIC;                    -- Reset global
+        piso_actual     : in  STD_LOGIC_VECTOR(2 downto 0); -- Piso actual (3 bits)
+        piso_destino    : in  STD_LOGIC_VECTOR(2 downto 0); -- Piso destino (3 bits)
+        fallo_energia   : in  STD_LOGIC;                    -- Señal de fallo de energía
+        notificacion    : in  STD_LOGIC;                    -- Señal de notificación
+        sobrecarga      : in  STD_LOGIC;                    -- Señal de sobrecarga
+        motor_subir     : out STD_LOGIC;                    -- Señal de subida
+        motor_bajar     : out STD_LOGIC;                    -- Señal de bajada
+        llegada_piso    : out STD_LOGIC;                    -- '1' cuando llega al piso destino
+        clear_request   : out STD_LOGIC_VECTOR(4 downto 0); -- Limpiar solicitudes internas (cabina)
+        clear_request_subir : out STD_LOGIC_VECTOR(3 downto 0); -- Limpiar solicitudes externas (subir)
+        clear_request_bajar : out STD_LOGIC_VECTOR(3 downto 0)  -- Limpiar solicitudes externas (bajar)
+    );
+end ControlAscensor;
+
+architecture Behavioral of ControlAscensor is
+    signal piso_actual_int  : integer range 1 to 5 := 1;
+    signal piso_destino_int : integer range 1 to 5 := 1;
+    signal motor_subir_int  : STD_LOGIC := '0';
+    signal motor_bajar_int  : STD_LOGIC := '0';
+    signal llegada_piso_int : STD_LOGIC := '0';
+    signal clear_request_int : STD_LOGIC_VECTOR(4 downto 0) := (others => '0');
+    signal clear_request_subir_int : STD_LOGIC_VECTOR(3 downto 0) := (others => '0');
+    signal clear_request_bajar_int : STD_LOGIC_VECTOR(3 downto 0) := (others => '0');
+begin
+
+    -- Convertir entradas a enteros
+    piso_actual_int <= to_integer(unsigned(piso_actual));
+    piso_destino_int <= to_integer(unsigned(piso_destino));
+
+    -- Control del motor y limpieza de solicitudes
+    process(clk_1Hz, reset)
+    begin
+        if reset = '1' then
+            motor_subir_int <= '0';
+            motor_bajar_int <= '0';
+            llegada_piso_int <= '0';
+            clear_request_int <= (others => '0');
+            clear_request_subir_int <= (others => '0');
+            clear_request_bajar_int <= (others => '0');
+        elsif rising_edge(clk_1Hz) then
+            -- Detener el motor si hay fallo de energía, notificación o sobrecarga
+            if fallo_energia = '1' or notificacion = '1' or sobrecarga = '1' then
+                motor_subir_int <= '0';
+                motor_bajar_int <= '0';
+                llegada_piso_int <= '0';
+                clear_request_int <= (others => '0');
+                clear_request_subir_int <= (others => '0');
+                clear_request_bajar_int <= (others => '0');
+            else
+                -- Determinar dirección del motor
+                if piso_actual_int < piso_destino_int then
+                    motor_subir_int <= '1';
+                    motor_bajar_int <= '0';
+                elsif piso_actual_int > piso_destino_int then
+                    motor_subir_int <= '0';
+                    motor_bajar_int <= '1';
+                else
+                    motor_subir_int <= '0';
+                    motor_bajar_int <= '0';
+                    llegada_piso_int <= '1'; -- Llegada al piso destino
+
+                    -- Limpiar solicitudes correspondientes
+                    clear_request_int(piso_destino_int - 1) <= '1'; -- Limpiar solicitud interna
+                    if piso_destino_int > 1 then
+                        clear_request_subir_int(piso_destino_int - 2) <= '1'; -- Limpiar solicitud de subir
+                    end if;
+                    if piso_destino_int < 5 then
+                        clear_request_bajar_int(piso_destino_int - 1) <= '1'; -- Limpiar solicitud de bajar
+                    end if;
+                end if;
+            end if;
+        end if;
+    end process;
+
+    -- Asignar salidas
+    motor_subir <= motor_subir_int;
+    motor_bajar <= motor_bajar_int;
+    llegada_piso <= llegada_piso_int;
+    clear_request <= clear_request_int;
+    clear_request_subir <= clear_request_subir_int;
+    clear_request_bajar <= clear_request_bajar_int;
+
+end Behavioral;

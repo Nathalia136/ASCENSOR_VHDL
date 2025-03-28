@@ -1,0 +1,6 @@
+
+State Machine - |detectar_piso_actual|state
+Name state.ADVANCE state.COUNTING state.IDLE 
+state.IDLE 0 0 0 
+state.COUNTING 0 1 1 
+state.ADVANCE 1 0 1 

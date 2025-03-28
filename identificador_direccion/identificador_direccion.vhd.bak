@@ -1,0 +1,59 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+use work.componentes.all;
+
+entity identificador_direccion is
+    Port (
+        clk_1Hz     : in  STD_LOGIC;                     -- Reloj de 1 Hz
+        reset       : in  STD_LOGIC;                     -- Reset global
+        motor_subir : in  STD_LOGIC;                     -- Señal de subida
+        motor_bajar : in  STD_LOGIC;                     -- Señal de bajada
+        piso_actual : in  STD_LOGIC_VECTOR(2 downto 0);  -- Piso actual (3 bits)
+        direccion   : out STD_LOGIC_VECTOR(1 downto 0);  -- Dirección: "00" = detenido, "01" = subiendo, "10" = bajando
+        piso_destino: out STD_LOGIC_VECTOR(2 downto 0)   -- Piso destino (3 bits)
+    );
+end identificador_direccion;
+
+architecture Behavioral of identificador_direccion is
+    signal piso_actual_int  : integer range 1 to 5 := 1;  -- Piso actual (entero)
+    signal piso_destino_int : integer range 1 to 5 := 1;  -- Piso destino (entero)
+    signal direccion_int    : STD_LOGIC_VECTOR(1 downto 0) := "00"; -- Dirección actual
+begin
+
+    -- Convertir piso_actual a entero
+    piso_actual_int <= to_integer(unsigned(piso_actual));
+
+    -- Lógica de identificación de dirección y piso destino
+    process(clk_1Hz, reset)
+    begin
+        if reset = '1' then
+            direccion_int <= "00"; -- Detenido
+            piso_destino_int <= piso_actual_int; -- Piso destino = piso actual
+        elsif rising_edge(clk_1Hz) then
+            if motor_subir = '1' then
+                direccion_int <= "01"; -- Subiendo
+                if piso_actual_int < 5 then
+                    piso_destino_int <= piso_actual_int + 1; -- Piso destino = piso actual + 1
+                else
+                    piso_destino_int <= piso_actual_int; -- Ya está en el piso máximo
+                end if;
+            elsif motor_bajar = '1' then
+                direccion_int <= "10"; -- Bajando
+                if piso_actual_int > 1 then
+                    piso_destino_int <= piso_actual_int - 1; -- Piso destino = piso actual - 1
+                else
+                    piso_destino_int <= piso_actual_int; -- Ya está en el piso mínimo
+                end if;
+            else
+                direccion_int <= "00"; -- Detenido
+                piso_destino_int <= piso_actual_int; -- Piso destino = piso actual
+            end if;
+        end if;
+    end process;
+
+    -- Asignar salidas
+    direccion    <= direccion_int;
+    piso_destino <= STD_LOGIC_VECTOR(to_unsigned(piso_destino_int, 3));
+
+end Behavioral;

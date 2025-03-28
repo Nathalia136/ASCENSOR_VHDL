@@ -1,0 +1,85 @@
+m255
+K3
+13
+cModel Technology
+Z0 dC:\vhdlB\ContadorPersonas\simulation\qsim
+vContadorPersonas
+Z1 !s100 2k;BLeGH@`:gGL2DIj[Vk1
+Z2 I6geEQ9MIKa97kGLM21IFg2
+Z3 V14;0_glHm?<]hB>:nOXFU3
+Z4 dC:\vhdlB\ContadorPersonas\simulation\qsim
+Z5 w1742935516
+Z6 8ContadorPersonas.vo
+Z7 FContadorPersonas.vo
+L0 31
+Z8 OV;L;10.1d;51
+r1
+31
+Z9 !s90 -work|work|ContadorPersonas.vo|
+Z10 o-work work -O0
+Z11 n@contador@personas
+!i10b 1
+!s85 0
+Z12 !s108 1742935517.266000
+Z13 !s107 ContadorPersonas.vo|
+!s101 -O0
+vContadorPersonas_vlg_check_tst
+!i10b 1
+Z14 !s100 ^^bDF=WK=I=im=[>h<<M`2
+Z15 IQ=olgCGBGY3[UQj_[`azn2
+Z16 V2enk:ZZ:Q2=PBbANBPENN3
+R4
+Z17 w1742935514
+Z18 8Waveform.vwf.vt
+Z19 FWaveform.vwf.vt
+L0 63
+R8
+r1
+!s85 0
+31
+Z20 !s108 1742935517.360000
+Z21 !s107 Waveform.vwf.vt|
+Z22 !s90 -work|work|Waveform.vwf.vt|
+!s101 -O0
+R10
+Z23 n@contador@personas_vlg_check_tst
+vContadorPersonas_vlg_sample_tst
+!i10b 1
+Z24 !s100 _czCXX4<PP0Z^OZbkCAG50
+Z25 I3BDe[F[_3X8ZToh?9XQgQ1
+Z26 VPXBYDG4T>i_h[MMSP07I_1
+R4
+R17
+R18
+R19
+L0 29
+R8
+r1
+!s85 0
+31
+R20
+R21
+R22
+!s101 -O0
+R10
+Z27 n@contador@personas_vlg_sample_tst
+vContadorPersonas_vlg_vec_tst
+!i10b 1
+!s100 F4^]DB^9bH=^gW3EdM4Bj1
+IXYaOmf^UADHecAO]gW@S02
+Z28 VBi=2?72l>egCf`X=n88Xc1
+R4
+R17
+R18
+R19
+Z29 L0 265
+R8
+r1
+!s85 0
+31
+R20
+R21
+R22
+!s101 -O0
+R10
+Z30 n@contador@personas_vlg_vec_tst

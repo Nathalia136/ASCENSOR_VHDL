@@ -1,0 +1,33 @@
+|Contador
+clk => cnt_value[0].CLK
+clk => cnt_value[1].CLK
+clk => cnt_value[2].CLK
+clk => cnt_value[3].CLK
+clk => cnt_value[4].CLK
+clk => cnt_value[5].CLK
+reset => cnt_value[0].ACLR
+reset => cnt_value[1].ACLR
+reset => cnt_value[2].ACLR
+reset => cnt_value[3].ACLR
+reset => cnt_value[4].ACLR
+reset => cnt_value[5].ACLR
+stop => cnt_value[1].ENA
+stop => cnt_value[0].ENA
+stop => cnt_value[2].ENA
+stop => cnt_value[3].ENA
+stop => cnt_value[4].ENA
+stop => cnt_value[5].ENA
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+up_down => cnt_value.OUTPUTSELECT
+count[0] <= cnt_value[0].DB_MAX_OUTPUT_PORT_TYPE
+count[1] <= cnt_value[1].DB_MAX_OUTPUT_PORT_TYPE
+count[2] <= cnt_value[2].DB_MAX_OUTPUT_PORT_TYPE
+count[3] <= cnt_value[3].DB_MAX_OUTPUT_PORT_TYPE
+count[4] <= cnt_value[4].DB_MAX_OUTPUT_PORT_TYPE
+count[5] <= cnt_value[5].DB_MAX_OUTPUT_PORT_TYPE
+
+

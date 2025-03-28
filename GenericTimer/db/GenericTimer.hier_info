@@ -1,0 +1,36 @@
+|GenericTimer
+clk_1Hz => Contador:CounterInst.clk
+clk_1Hz => done~reg0.CLK
+clk_1Hz => cnt_enable.CLK
+reset => Contador:CounterInst.reset
+reset => done~reg0.ACLR
+reset => cnt_enable.ACLR
+start => cnt_enable.OUTPUTSELECT
+done <= done~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|GenericTimer|Contador:CounterInst
+clk => cnt[0].CLK
+clk => cnt[1].CLK
+clk => cnt[2].CLK
+clk => cnt[3].CLK
+reset => cnt[0].ACLR
+reset => cnt[1].ACLR
+reset => cnt[2].ACLR
+reset => cnt[3].ACLR
+stop => cnt[0].ENA
+stop => cnt[1].ENA
+stop => cnt[2].ENA
+stop => cnt[3].ENA
+up_down => cnt.OUTPUTSELECT
+up_down => cnt.OUTPUTSELECT
+up_down => cnt.OUTPUTSELECT
+up_down => cnt.OUTPUTSELECT
+count[0] <= cnt[0].DB_MAX_OUTPUT_PORT_TYPE
+count[1] <= cnt[1].DB_MAX_OUTPUT_PORT_TYPE
+count[2] <= cnt[2].DB_MAX_OUTPUT_PORT_TYPE
+count[3] <= cnt[3].DB_MAX_OUTPUT_PORT_TYPE
+count[4] <= <GND>
+count[5] <= <GND>
+
+
